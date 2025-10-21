@@ -1,8 +1,8 @@
 export default function DashboardCard({ title, children }) {
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm">
-      <h3 className="text-sm font-medium text-gray-600">{title}</h3>
-      <div className="mt-2">{children}</div>
+    <div className="bg-white hover:shadow-lg transition-shadow duration-200 rounded-2xl border border-gray-100 p-5">
+      <h2 className="text-gray-700 font-semibold mb-2">{title}</h2>
+      <div>{children}</div>
     </div>
   )
 }
