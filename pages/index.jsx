@@ -23,7 +23,7 @@ export default function Home() {
   const signInAnonymously = async () => {
     // demo: sign in with a random magic link email or anon sign-in depends on Supabase config.
     // For MVP we just set a dummy user locally to avoid surprising auth setup:
-    setUser({ email: 'demo@market-moves.app' })
+    setUser({ email: 'james@market-moves.app' })
   }
 
   return (
