@@ -13,9 +13,9 @@ export default function Home() {
     })
     // fetch dummy portfolio
     setPortfolio([
-      { id: 1, label: 'Cash (GBP)', balance: 14200.12 },
-      { id: 2, label: 'Bitcoin', balance: 14.4321 },
-      { id: 3, label: 'Stocks', balance: 75420.8 }
+      { id: 1, label: 'Cash (GBP)', balance: 44,319.12 },
+      { id: 2, label: 'Bitcoin', balance: 16.4321 },
+      { id: 3, label: 'Stocks', balance: 115,420.8 }
     ])
     return () => s.data?.unsubscribe?.()
   }, [])
@@ -23,7 +23,7 @@ export default function Home() {
   const signInAnonymously = async () => {
     // demo: sign in with a random magic link email or anon sign-in depends on Supabase config.
     // For MVP we just set a dummy user locally to avoid surprising auth setup:
-    setUser({ email: 'james@market-moves.app' })
+    setUser({ email: 'demo@market-moves.app' })
   }
 
   return (
