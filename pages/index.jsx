@@ -8,7 +8,6 @@ export default function Home() {
   const [portfolio, setPortfolio] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Fetch or create demo data
   useEffect(() => {
     const init = async () => {
       try {
@@ -17,25 +16,29 @@ export default function Home() {
           setUser(session?.user ?? null)
         })
 
-        // TEMP: sign in demo user automatically
-        const { data: { user: demoUser }, error: signInError } = await supabase.auth.signInWithPassword({
-          email: 'demo1@market-moves.app',
-          password: 'demo123'
-        })
+        // TEMP: auto sign-in with demo user
+        const { data: { user: demoUser }, error: signInError } =
+          await supabase.auth.signInWithPassword({
+            email: 'demo1@market-moves.app',
+            password: 'demo123'
+          })
 
-        if (signInError) console.warn('Demo user sign-in failed:', signInError.message)
+        if (signInError) console.warn('Demo sign-in failed:', signInError.message)
         if (demoUser) setUser(demoUser)
 
-        // Fetch sample portfolio (or placeholder if empty)
-        const { data: holdings, error } = await supabase.from('holdings').select('*').limit(10)
-        if (error) console.warn('Error loading holdings:', error.message)
+        // 🔹 Fetch portfolio data from Supabase
+        const { data: portfolios, error: portfolioError } =
+          await supabase.from('portfolios').select('*').limit(10)
 
+        if (portfolioError) console.warn('Error loading portfolios:', portfolioError.message)
+
+        // 🔹 Fallback to dummy data if table is empty
         setPortfolio(
-          holdings?.length
-            ? holdings.map((h) => ({
-                id: h.id,
-                label: h.asset_name || 'Unknown asset',
-                balance: h.amount || 0
+          portfolios?.length
+            ? portfolios.map((p) => ({
+                id: p.id,
+                label: p.asset_name || p.name || 'Unnamed Asset',
+                balance: p.amount || p.value || 0
               }))
             : [
                 { id: 1, label: 'Cash (GBP)', balance: 4200.12 },
@@ -53,11 +56,6 @@ export default function Home() {
     init()
   }, [])
 
-  // Demo sign-in fallback button
-  const signInAnonymously = () => {
-    setUser({ email: 'demo@market-moves.app' })
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-600">
@@ -74,15 +72,18 @@ export default function Home() {
         {/* Header Section */}
         <div className="mb-6 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-800">Portfolio Dashboard</h1>
-          {!user ? (
+          {user ? (
+            <div className="text-sm text-gray-600">Signed in as {user.email}</div>
+          ) : (
             <button
-              onClick={signInAnonymously}
+              onClick={() => supabase.auth.signInWithPassword({
+                email: 'demo1@market-moves.app',
+                password: 'demo123'
+              })}
               className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
             >
               Demo sign in
             </button>
-          ) : (
-            <div className="text-sm text-gray-600">Signed in as {user.email}</div>
           )}
         </div>
 
@@ -111,13 +112,23 @@ export default function Home() {
         <section className="mt-8">
           <DashboardCard title="Quick Actions">
             <div className="flex flex-wrap gap-3">
-              <button className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition">Top up</button>
-              <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition">Trade</button>
-              <button className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">More</button>
+              <button className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition">
+                Top up
+              </button>
+              <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                Trade
+              </button>
+              <button className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">
+                More
+              </button>
             </div>
           </DashboardCard>
         </section>
       </main>
+    </div>
+  )
+}
+
     </div>
   )
 }
