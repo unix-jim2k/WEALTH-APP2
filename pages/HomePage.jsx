@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
 import Header from '../components/Header'
 import DashboardCard from '../components/DashboardCard'
+import { supabase } from '../lib/supabaseClient'
 
 export default function HomePage() {
   const [user, setUser] = useState(null)
@@ -22,16 +22,13 @@ export default function HomePage() {
     return () => listener?.unsubscribe()
   }, [])
 
-  const signInAnonymously = () => {
-    setUser({ email: 'demo@market-moves.app' })
-  }
+  const signInAnonymously = () => setUser({ email: 'demo@market-moves.app' })
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header user={user} />
 
       <main className="p-6 max-w-5xl mx-auto">
-        {/* Header Section */}
         <div className="mb-6 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-800">Portfolio Dashboard</h1>
           {!user ? (
@@ -46,7 +43,6 @@ export default function HomePage() {
           )}
         </div>
 
-        {/* Portfolio Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {portfolio.map((item, idx) => (
             <DashboardCard key={item.id} title={item.label}>
@@ -59,13 +55,14 @@ export default function HomePage() {
                     : 'bg-gradient-to-r from-blue-400 to-indigo-500'
                 }`}
               >
-                {typeof item.balance === 'number' ? item.balance.toLocaleString() : item.balance}
+                {typeof item.balance === 'number'
+                  ? item.balance.toLocaleString()
+                  : item.balance}
               </div>
             </DashboardCard>
           ))}
         </div>
 
-        {/* Quick Actions */}
         <section className="mt-8">
           <DashboardCard title="Quick Actions">
             <div className="flex flex-wrap gap-4">
