@@ -1,7 +1,7 @@
 {
-  "name": "wealth-app",
+  "name": "wealth-app2",
   "version": "1.0.0",
-  "description": "The Wealth App™ (Market-Moves.com) — Next.js + Supabase MVP scaffold",
+  "description": "The Wealth App v2.0™ (Market-Moves.com) — Next.js + Supabase MVP scaffold",
   "main": "index.js",
   "scripts": {
     "dev": "next dev -p 3000",
@@ -27,3 +27,4 @@
     "tailwindcss": "^3.4.4"
   }
 }
+
