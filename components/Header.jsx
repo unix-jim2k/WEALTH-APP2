@@ -4,7 +4,7 @@ export default function Header({ user }) {
       {/* Animated gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 animate-gradient-x opacity-70"></div>
 
-      {/* Content */}
+      {/* Header content */}
       <div className="relative max-w-5xl mx-auto px-6 flex justify-between items-center">
         <h1 className="text-xl font-bold text-white z-10">The Wealth App™</h1>
         {user ? (
