@@ -12,6 +12,7 @@ export default function HomePage() {
       setUser(session?.user ?? null)
     })
 
+    // Dummy portfolio
     setPortfolio([
       { id: 1, label: 'Cash (GBP)', balance: 4200.12 },
       { id: 2, label: 'Bitcoin', balance: 0.4321 },
