@@ -13,9 +13,9 @@ export default function Home() {
     })
     // fetch dummy portfolio
     setPortfolio([
-      { id: 1, label: 'Cash (GBP)', balance: 44,319.12 },
-      { id: 2, label: 'Bitcoin', balance: 16.4321 },
-      { id: 3, label: 'Stocks', balance: 115,420.8 }
+      { id: 1, label: 'Cash (GBP)', balance: 4200.12 },
+      { id: 2, label: 'Bitcoin', balance: 0.4321 },
+      { id: 3, label: 'Stocks', balance: 15420.8 }
     ])
     return () => s.data?.unsubscribe?.()
   }, [])
@@ -62,3 +62,4 @@ export default function Home() {
     </div>
   )
 }
+
