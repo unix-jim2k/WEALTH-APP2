@@ -1,0 +1,7 @@
+POST /api/portfolio/update
+{
+  "user_id": "demo-user-id",
+  "asset_type": "crypto",
+  "asset_label": "Bitcoin",
+  "balance": 0.4321
+}
