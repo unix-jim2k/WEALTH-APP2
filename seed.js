@@ -3,30 +3,37 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-// Supabase client
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY)
 
-// Only run in dev/staging
+// Prevent accidental production seeding
 if (process.env.NODE_ENV === 'production') {
-  console.log('Seeding disabled in production!')
+  console.log('✅ Seeding disabled in production!')
   process.exit(0)
 }
 
-// Utility to generate random balances
+// Helper: random balance
 const getRandomBalance = (max, decimals = 2) =>
   parseFloat((Math.random() * max).toFixed(decimals))
 
-// Seed function
 async function seed() {
   try {
-    console.log('Deleting old demo data...')
-    // Remove demo users, portfolios, trades
-    await supabase.from('trades').delete().ilike('user_id', '%demo%')
-    await supabase.from('portfolios').delete().ilike('user_id', '%demo%')
-    await supabase.from('profiles').delete().ilike('email', 'demo%@market-moves.app')
+    console.log('🧹 Deleting old demo users and related data...')
+    const demoUserIds = (
+      await supabase
+        .from('profiles')
+        .select('id')
+        .ilike('email', 'demo%@market-moves.app')
+    ).data?.map(u => u.id) || []
 
-    console.log('Creating demo users...')
+    if (demoUserIds.length) {
+      await supabase.from('trades').delete().in('user_id', demoUserIds)
+      await supabase.from('portfolios').delete().in('user_id', demoUserIds)
+      await supabase.from('profiles').delete().in('id', demoUserIds)
+    }
+
+    console.log('👥 Creating 30 demo users...')
     const demoEmails = Array.from({ length: 30 }, (_, i) => `demo${i + 1}@market-moves.app`)
+
     const { data: profiles, error: profilesError } = await supabase
       .from('profiles')
       .insert(demoEmails.map(email => ({ email })))
@@ -34,7 +41,7 @@ async function seed() {
 
     if (profilesError) throw profilesError
 
-    console.log('Populating portfolios and trades...')
+    console.log('💰 Populating portfolios and trades...')
     for (const profile of profiles) {
       const { id } = profile
 
@@ -45,14 +52,14 @@ async function seed() {
         { user_id: id, asset_type: 'stocks', asset_label: 'Stocks', balance: getRandomBalance(50000) }
       ])
 
-      // Trades
+      // Demo trades
       await supabase.from('trades').insert([
         { user_id: id, asset_type: 'crypto', amount: getRandomBalance(0.5, 4), price: getRandomBalance(40000), trade_type: 'buy' },
         { user_id: id, asset_type: 'stocks', amount: getRandomBalance(100, 2), price: getRandomBalance(500), trade_type: 'buy' }
       ])
     }
 
-    console.log('✅ Seeding complete!')
+    console.log('✅ Demo seeding complete!')
     process.exit(0)
   } catch (err) {
     console.error('❌ Error seeding data:', err)
@@ -60,4 +67,4 @@ async function seed() {
   }
 }
 
-seed() 
+seed()
