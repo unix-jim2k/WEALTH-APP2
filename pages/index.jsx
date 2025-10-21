@@ -3,7 +3,8 @@
     <h1 className="text-3xl font-bold tracking-tight text-gray-800">
       Portfolio Dashboard
     </h1>
-    {!user ? (
+    {!user ? (setUser({ email: 'demo@market-moves.app' })
+  }
       <button
         onClick={signInAnonymously}
         className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium shadow"
@@ -30,4 +31,5 @@
     ))}
   </div>
 </main>
+
 
